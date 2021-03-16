@@ -5,20 +5,23 @@ export class ScooterElectricidad extends Scooter {
         NewMarca: string,
         NewModelo: string,
         NewColor: string,
-        NewPotencia: number
+        imagen: string,
+        importe: number
     ) {
-        super (NewMarca,NewModelo,NewColor, NewPotencia);
+        super (NewMarca,NewModelo,NewColor, imagen,importe);
     }
 
     public mostrarCaracteristicas ()
     {
         let table = document.getElementById('objetos');
-        let tr = document.createElement('tr');
 
-        /*for (let propiedades in this) {
+        let tr = document.createElement('tr');
+        tr.id = this.marca + this.modelo;
+
+/*        for (let propiedades in this) {
             let td = document.createElement('td');
             td.innerHTML = propiedades;
-            td.classList.add ('s_electrico');
+            td.classList.add ('gasolina');
             tr.appendChild(td);
             
         }
@@ -26,30 +29,32 @@ export class ScooterElectricidad extends Scooter {
         table.appendChild(tr);
         tr = document.createElement('tr');*/
         let td = document.createElement("td");
-        td.innerHTML = "Scooter Eléctrico";
-        td.style.fontWeight = "bold";
-        td.style.color = "green";
+        let img = document.createElement("img");
+        img.src = this.imagen.toString();
+        td.appendChild (img);
         tr.appendChild (td);
 
         
         for (let propiedades in this) {
-            let td = document.createElement('td');
-            td.innerHTML = this[propiedades].toString();
-            td.style.color = "green";
-            td.classList.add ('s_electrico');
-            tr.appendChild(td);
+
+            if (propiedades != "imagen") {
+                let td = document.createElement('td');
+                td.innerHTML = this[propiedades].toString();
+                td.classList.add ('gasolina');
+                tr.appendChild(td);
+            }
+
             
         }
 
-        td = document.createElement ("td");
-        td.innerHTML = "&nbsp";
-        tr.appendChild (td);
-        td = document.createElement ("td");
-        td.innerHTML = "&nbsp";
-        tr.appendChild (td);
-      
+        table.appendChild(tr);   
 
-        table.appendChild(tr);
-        document.body.appendChild(table);    }
-    
+
+    }
+
+
+    getImporte ()
+    {
+        return this.importe;
+    }    
 }

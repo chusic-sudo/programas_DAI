@@ -1,11 +1,12 @@
 import { Automovil } from './automovil.js';
 export class AutomovilGasolina extends Automovil {
-    constructor(NewMarca, NewModel, NewColor, NewPotencia, NewEspacio, NewSpeed) {
-        super(NewMarca, NewModel, NewColor, NewPotencia, NewEspacio, NewSpeed);
+    constructor(NewMarca, NewModel, NewColor, imagen, importe) {
+        super(NewMarca, NewModel, NewColor, imagen, importe);
     }
     mostrarCaracteristicas() {
         let table = document.getElementById('objetos');
         let tr = document.createElement('tr');
+        tr.id = this.marca + this.modelo;
         /*		for (let propiedades in this) {
                     let td = document.createElement('td');
                     td.innerHTML = propiedades;
@@ -17,27 +18,22 @@ export class AutomovilGasolina extends Automovil {
                 table.appendChild(tr);
                 tr = document.createElement('tr');*/
         let td = document.createElement("td");
-        td.innerHTML = "Automóvil Gasolina";
-        td.style.fontWeight = "bold";
+        let img = document.createElement("img");
+        img.src = this.imagen.toString();
+        td.appendChild(img);
         tr.appendChild(td);
         for (let propiedades in this) {
-            let td = document.createElement('td');
-            td.innerHTML = this[propiedades].toString();
-            td.classList.add('gasolina');
-            tr.appendChild(td);
+            if (propiedades != "imagen") {
+                let td = document.createElement('td');
+                td.innerHTML = this[propiedades].toString();
+                td.classList.add('gasolina');
+                tr.appendChild(td);
+            }
         }
         table.appendChild(tr);
         //document.body.appendChild(table);
     }
-    aumentaVelocidad() {
-        this.speed++;
-        return this.speed;
-    }
-    disminuyeVelocidad() {
-        this.speed--;
-        return this.speed;
-    }
-    obtieneVelocidad() {
-        return this.speed;
+    getImporte() {
+        return this.importe;
     }
 }

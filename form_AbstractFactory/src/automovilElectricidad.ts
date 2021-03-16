@@ -6,22 +6,23 @@ export class AutomovilElectricidad extends Automovil {
 		NewMarca: string,
 		NewModel: string,
 		NewColor: string,
-		NewPotencia: number,
-		NewEspacio: number,
-        NewSpeed: number) {
+        imagen: string,
+        importe: number) {
 		
-		super (NewMarca,NewModel,NewColor,NewPotencia,NewEspacio,NewSpeed); 
+		super (NewMarca,NewModel,NewColor,imagen,importe); 
 	}
 
 	public mostrarCaracteristicas ()
 	{
 		let table = document.getElementById('objetos');
-		let tr = document.createElement('tr');
 
-		/*for (let propiedades in this) {
+		let tr = document.createElement('tr');
+		tr.id = this.marca + this.modelo;
+
+/*		for (let propiedades in this) {
 			let td = document.createElement('td');
 			td.innerHTML = propiedades;
-			td.classList.add ('electrico');
+			td.classList.add ('gasolina');
 			tr.appendChild(td);
  		   
 		}
@@ -29,38 +30,31 @@ export class AutomovilElectricidad extends Automovil {
 		table.appendChild(tr);
 		tr = document.createElement('tr');*/
 		let td = document.createElement("td");
-		td.innerHTML = "Automóvil Eléctrico";
-		td.style.fontWeight ="bold";
-        td.style.color = "blue";		
+		let img = document.createElement("img");
+		img.src = this.imagen.toString();
+		td.appendChild (img);
 		tr.appendChild (td);
+
 		
 		for (let propiedades in this) {
-			let td = document.createElement("td");
-			td.innerHTML = this[propiedades].toString();
-			td.style.color = "blue";
-			//td.classList.add ('electrico');
-			tr.appendChild(td);
+
+			if (propiedades != "imagen") {
+				let td = document.createElement('td');
+				td.innerHTML = this[propiedades].toString();
+				td.classList.add ('gasolina');
+				tr.appendChild(td);
+			}
+
  		   
 		}
 
 		table.appendChild(tr);
-		document.body.appendChild(table);	}
+		//document.body.appendChild(table);	
+	}
 
-    public aumentaVelocidad (): number
-    {
-        this.speed ++;
-        return this.speed;
-    }
-
-    public disminuyeVelocidad (): number
-    {
-        this.speed --;
-        return this.speed;
-    }
-
-    public obtieneVelocidad (): number
-    {
-        return this.speed;
-    }
+	getImporte ()
+	{
+		return this.importe;
+	}
 
 }

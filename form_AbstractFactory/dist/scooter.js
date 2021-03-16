@@ -1,8 +1,9 @@
 export class Scooter {
-    constructor(NewMarca, NewModel, NewColor, NewPotencia) {
+    constructor(NewMarca, NewModel, NewColor, imagen, importe) {
         this.marca = NewMarca;
         this.modelo = NewModel;
         this.color = NewColor;
-        this.potencia = NewPotencia;
+        this.imagen = imagen;
+        this.importe = importe;
     }
 }

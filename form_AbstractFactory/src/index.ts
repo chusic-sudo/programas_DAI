@@ -8,95 +8,30 @@ import {AutomovilElectricidad} from './automovilElectricidad.js'
 import {AutomovilGasolina} from './automovilGasolina.js'
 import {ScooterElectricidad} from './scooterElectricidad.js'
 import {ScooterGasolina} from './scooterGasolina.js'
+import {FabricaVehiculoGasolina} from './FabricaVehiculoGasolina.js'
+import {FabricaVehiculoElectricidad} from './FabricaVehiculoElectricidad.js'
+import {Automovil} from './automovil.js'
+import {Scooter} from './scooter.js'
+import {ClienteContado} from './Clientecontado.js'
+import {ClienteCredito} from './ClienteCredito.js'
+
 
 let form = new CreateForm("Formulario","text","");
-let marca = new createInput ("Marca","text","");
-let modelo = new createInput ("Modelo","text","");
-let color = new createInput ("Color","text","");
-let potencia = new createInput("Potencia","text","");
-let espacio = new createInput("Espacio","text","");
-let speed = new createInput("Speed","text","");
-let select = new CreateSelect ("Lista",["Automóvil Gasolina","Automóvil Eléctrico","Scooter Gasolina","Scooter Eléctrico"]);
-let text = document.createTextNode("Marca:");
-let br = document.createElement ("br");
-let bt_create = new createInput ("Create","Button","Crear el objeto");
-let bt_consulta = new createInput ("Consulta","Button","Consultar los objetos");
-let text_error = new CreateDiv ("Error","Error");
-let autosGasolina = new Array <AutomovilGasolina> ();
-let autosElectrico = new Array <AutomovilElectricidad> ();
-let scooterGasolina = new Array <ScooterElectricidad> ();
-let scooterElectricidad = new Array <ScooterElectricidad> ();
+let bt_gasolina = new createInput ("Create","Button","Catálogo Gasolina");
+let bt_electrico = new createInput ("Consulta","Button","Catálogo Eléctrico");
+let autos = new Array <Automovil> ();
+let scooter = new Array <Scooter> ();
 
 
 document.getElementById("container").appendChild(form.getElement());
-document.getElementById("container").appendChild(text_error.getElement());
-text_error.setHidden ();
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
+form.getElement().appendChild(bt_gasolina.getElement());
+form.getElement().appendChild(bt_electrico.getElement());
 
-form.getElement().appendChild(marca.getElement ());
-form.getElement().appendChild(br.cloneNode());
-text = document.createTextNode("Modelo: ");
+bt_gasolina.getElement().addEventListener("click", () => catalogo ("Gasolina"));
+bt_electrico.getElement().addEventListener("click", () => catalogo ("Electrico"));
 
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(modelo.getElement());
-form.getElement().appendChild(br.cloneNode());
-
-text = document.createTextNode("Color: ");
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(color.getElement());
-form.getElement().appendChild(br.cloneNode());
-
-text = document.createTextNode ("Potencia: ");
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(potencia.getElement());
-form.getElement().appendChild(br.cloneNode());
-
-text = document.createTextNode("Espacio: ");
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(espacio.getElement());
-form.getElement().appendChild(br.cloneNode());
-
-text = document.createTextNode("Velocidad: ");
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(speed.getElement());
-form.getElement().appendChild(br.cloneNode());
-
-text = document.createTextNode("Tipo de objeto: ");
-form.getElement().appendChild(text);
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(select.getElement());
-form.getElement().appendChild(br.cloneNode());
-form.getElement().appendChild(br.cloneNode());
-
-form.getElement().appendChild(bt_create.getElement());
-form.getElement().appendChild(bt_consulta.getElement());
-
-bt_create.getElement().addEventListener("click", () => createObject ());
-bt_consulta.getElement().addEventListener("click", () => consultaObject ());
-
-
-function consultaObject ()
+function ColocaTabla ()
 {
-    var i:number,limite:number;
-
-    // Limpiar la tabla colocada
-
-/*    
-    let tmp = document.getElementsByTagName("table");
-
-    if (tmp != null) {
-        limite = tmp.length;
-        for (i = 0; i < limite; i++) {
-            tmp [0].parentElement.removeChild(tmp [0]);
-        }
-    }*/
-
     let tmp = document.getElementById("objetos");
 
     if (tmp != null) {
@@ -109,7 +44,7 @@ function consultaObject ()
 
     let tr = document.createElement('tr');
     let td = document.createElement('th');
-    td.innerHTML = "Tipo Objeto";
+    td.innerHTML = "Imagen";
     tr.appendChild(td);
     td = document.createElement("th");
     td.innerHTML = "Marca";
@@ -121,104 +56,126 @@ function consultaObject ()
     td.innerHTML = "Color";
     tr.appendChild (td);
     td = document.createElement("th");
-    td.innerHTML = "Potencia";
+    td.innerHTML = "Precio";
     tr.appendChild (td);
+
     td = document.createElement("th");
-    td.innerHTML = "Espacio";
+    td.innerHTML = "¿Solicitar?";
     tr.appendChild (td);
-    td = document.createElement("th");
-    td.innerHTML = "Velocidad";
-    tr.appendChild (td);
+
 
     tmp.appendChild (tr);
 
-    // Colocar las nuevas
-
-    for (let tmp of autosGasolina) {
-        tmp.mostrarCaracteristicas ();
-    }
-
-    for (let tmp of autosElectrico) {
-        tmp.mostrarCaracteristicas ();
-    }
-
-    for (let tmp of scooterGasolina) {
-        tmp.mostrarCaracteristicas ();
-    }
-
-    for (let tmp of scooterElectricidad) {
-        tmp.mostrarCaracteristicas ();
-    }
 }
 
-function createObject () {
-    if (espacio.getValue () == "") {
-        espacio.setValue("0");
-    }
 
-    if (speed.getValue () == "") {
-        speed.setValue ("0");
-    }
+function catalogo (tipo: string)
+{
+    let Cl_Contado = new ClienteContado ();
+    let Cl_Credito = new ClienteCredito ();
+    let fabrica = new FabricaVehiculoGasolina ();
+    let bt_s0 = new createInput ("Cr_1","Button","Crédito");
+    let bt_s1 = new createInput ("Cr_1","Button","Crédito");
+    let bt_s2 = new createInput ("Cr_1","Button","Crédito");
+    let bt_s3 = new createInput ("Cr_1","Button","Crédito");
+    let bt_s4 = new createInput ("Cr_1","Button","Crédito");
+    let bt_s5 = new createInput ("Cr_1","Button","Crédito");
 
-    if (potencia.getValue () == "") {
-        potencia.setValue ("0");
-    }
+    ColocaTabla ();
 
-    text_error.background("orange");
-    text_error.setPosition("absolute");
+   if (tipo == "Gasolina") {
+        let fabrica = new FabricaVehiculoGasolina ();
+        autos.push(fabrica.creaAutomovil("Jaguar","F-Type","Azul","img/jaguar.jpg",80000));
+        scooter.push (fabrica.creaScooter("KEN","ROD","Marron","img/KenRod.jpg",8000));
+        autos.push (fabrica.creaAutomovil("Renault","Clio","Naranja","img/renault.jpg",20000));
 
-    if (marca.getValue () == "") {
-        text_error.setVisible ();
-        text_error.setText("*ERROR: El nombre de la marca es necesario");
-        text_error.setTop("100px");
-        text_error.setLeft("250px");
-    }
-    else if (modelo.getValue () == "") {
-        text_error.setVisible ();
-        text_error.setText("*ERROR: El nombre del modelo es necesario");
-        text_error.setTop("140px");
-        text_error.setLeft("250px");
+        autos [0].mostrarCaracteristicas ();
 
-    }
-    else if (color.getValue () == "") {
-        text_error.setVisible ();
-        text_error.setText("*ERROR: El color es necesario");
-        text_error.setTop("180px");
-        text_error.setLeft("250px");
+        autos [1].mostrarCaracteristicas ();
+        scooter[0].mostrarCaracteristicas (); 
+        let tr = document.getElementById("JaguarF-Type");
+        let td = document.createElement("td");
+        bt_s0 = new createInput ("Cr_1","Button","Crédito");
+        bt_s0.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(autos[0].getImporte ()));
+        td.appendChild (bt_s0.getElement ());
+        bt_s0 = new createInput ("Contado1","Button","Contado");
+        bt_s0.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(autos[0].getImporte ()));
+        td.appendChild (bt_s0.getElement ());
+
+        tr.appendChild (td);
+        tr = document.getElementById("KENROD");
+        td = document.createElement("td");
+        bt_s1 = new createInput ("Cr_2","Button","Crédito");
+        bt_s1.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(scooter[0].getImporte ()));
+
+        td.appendChild (bt_s1.getElement ());
+        bt_s1 = new createInput ("Contado2","Button","Contado");
+        bt_s1.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(scooter[0].getImporte ()));
+        td.appendChild (bt_s1.getElement ());
+
+
+        tr.appendChild (td);
+        tr = document.getElementById("RenaultClio");
+        td = document.createElement("td");
+        bt_s2 = new createInput ("Cr_3","Button","Crédito");
+        bt_s2.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(autos[1].getImporte ()));
+
+        td.appendChild (bt_s2.getElement ());
+        bt_s2 = new createInput ("Contado3","Button","Contado");
+        bt_s2.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(autos[1].getImporte ()));
+        td.appendChild (bt_s2.getElement ());
+
+
+
+         tr.appendChild (td);
+
+
 
     }
     else {
-        // Crear el objeto
+        let fabrica = new FabricaVehiculoElectricidad ();
+        autos.push(fabrica.creaAutomovil("Tesla","Model-S","Rojo","img/teslamodel_s.jpg",120000));
+        scooter.push (fabrica.creaScooter("Zapp","300","Diverso","img/zapp.jpg",1000));
+        autos.push (fabrica.creaAutomovil("NIO","ET","Blanco","img/nio.jpg",200000));
 
-        text_error.setHidden ();
+        autos [0].mostrarCaracteristicas ();
+        autos [1].mostrarCaracteristicas ();
+        scooter[0].mostrarCaracteristicas ();       
+        let tr = document.getElementById("TeslaModel-S");
+        let td = document.createElement("td");
+        bt_s3 = new createInput ("Cr_1","Button","Crédito");
+        bt_s3.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(autos[0].getImporte ()));
+        td.appendChild (bt_s3.getElement ());
+        bt_s3 = new createInput ("Contado1","Button","Contado");
+        bt_s3.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(autos[0].getImporte ()));
+        td.appendChild (bt_s3.getElement ());
+        tr.appendChild (td);
+        tr = document.getElementById("Zapp300");
+        td = document.createElement("td");
+        bt_s4 = new createInput ("Cr_2","Button","Crédito");
+        bt_s4.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(scooter[0].getImporte ()));
 
-        switch (select.getValue ()) {
-            case "Automóvil Gasolina": {
-                 let tmp = new AutomovilGasolina(marca.getValue(),modelo.getValue(),color.getValue(),0,parseInt(espacio.getValue()),parseInt(speed.getValue()));
-                 autosGasolina.push (tmp);
-                 break;
-             }
-             case "Automóvil Eléctrico": {
-                 let tmp = new AutomovilElectricidad(marca.getValue(),modelo.getValue(),color.getValue(),0,parseInt(espacio.getValue()),parseInt(speed.getValue()));
-                 autosElectrico.push (tmp);
-                 break;
-             }
-             case "Scooter Gasolina": {
-                 let tmp = new ScooterGasolina(marca.getValue(),modelo.getValue(),color.getValue(),0);
-                 scooterGasolina.push (tmp);
-                 break;
-             }
-             case "Scooter Eléctrico": {
-                 let tmp = new ScooterElectricidad(marca.getValue(),modelo.getValue(),color.getValue(),0);
-                 scooterElectricidad.push (tmp);
-                 break;
-             }
-            }
-        }
+        td.appendChild (bt_s4.getElement ());
+        bt_s4 = new createInput ("Contado2","Button","Contado");
+        bt_s4.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(scooter[0].getImporte ()));
+        td.appendChild (bt_s4.getElement ());
+        tr.appendChild (td);
+        tr = document.getElementById("NIOET");
+        td = document.createElement("td");
+        bt_s5 = new createInput ("Cr_3","Button","Crédito");
+        bt_s5.getElement().addEventListener("click", () => Cl_Credito.nuevopedido(autos[1].getImporte ()));
+
+        td.appendChild (bt_s5.getElement ());
+        bt_s5 = new createInput ("Contado3","Button","Contado");
+        bt_s5.getElement().addEventListener("click", () => Cl_Contado.nuevopedido(autos[1].getImporte ()));
+        td.appendChild (bt_s5.getElement ());
+        tr.appendChild (td);
 
 
     }
-    
+
+
+}
 
 
 
