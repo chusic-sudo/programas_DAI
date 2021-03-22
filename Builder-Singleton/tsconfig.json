@@ -1,0 +1,19 @@
+{
+    "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "allowJs":true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "ES2015",
+      "DOM"
+    ],
+    "target": "ES2015",
+    "outDir": "./dist/",
+    "moduleResolution": "node",   
+    "strict": true,
+    "strictNullChecks": false
+  }
+}
