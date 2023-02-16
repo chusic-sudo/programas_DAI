@@ -5,8 +5,10 @@
  */
 package password;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -104,6 +106,8 @@ public class Password {
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner entrada = new Scanner (System.in);
+                
+       
         
        int num_passwords;
        int long_passwords;
