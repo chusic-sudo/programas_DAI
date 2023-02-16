@@ -125,12 +125,12 @@ public class Password {
             
         }
         
-        System.out.println("Tornem a generar passwords amb bucle for--each: ");
+       /* System.out.println("Tornem a generar passwords amb bucle for--each: ");
         
         for (Password p: pass) {
             p.setContrasenya (p.generarContrasenya(long_passwords));
             System.out.println("Password: " + p.getContrasenya());
-        }
+        }*/
     
         
     }
